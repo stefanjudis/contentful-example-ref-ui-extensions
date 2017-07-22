@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>Contentful UI extension country select</title>
+    <link rel="stylesheet" href="https://contentful.github.io/ui-extensions-sdk/cf-extension.css">
+    <script src="https://contentful.github.io/ui-extensions-sdk/cf-extension-api.js"></script>
+  </head>
+  <body>
+    <ul id="colleges">
+
+    </ul>
+    <p id="status"></p>
+    <script>
+      // initialize ui extension
+      window.contentfulExtension.init( extension => {
+        // the entries are bound to the available validations
+        // for the given reference field
+        const allowedContentTypes = extension.field.validations.reduce(
+          (acc, val) => {
+            if ( val.linkContentType ) {
+              acc = acc.concat( val.linkContentType )
+            }
+
+            return acc;
+          }, [] );
+
+        // fetch entries for allowed content types
+        Promise.all(
+          allowedContentTypes.map(
+            type => extension.space.getEntries({ content_type: type }).then( resp => resp.items )
+          )
+        ).then( ([...args]) => {
+          const items = args.reduce( (acc, items) => acc.concat(items), []);
+          const list = document.getElementById('colleges');
+          const status = document.getElementById('status');
+
+          // get current field value
+          // and extract reference entry ID
+          let currentValue = extension.field.getValue();
+          let currentId = currentValue && currentValue.sys.id;
+
+          // render radio button list
+          list.innerHTML = items.map(item => `
+            <li><label>
+              <input name="college" type="radio" value="${item.sys.id}" ${ item.sys.id === currentId ? 'checked' : '' }>
+              ${item.fields.title['en-US']}
+            </label>
+          `).join('');
+
+          // a little DOM handling :)
+          [...document.querySelectorAll('input[type=radio]')].forEach( elem => {
+            elem.addEventListener('change', event => {
+              status.innerHTML = '';
+
+              // save new set value
+              extension.field.setValue({
+                sys: {
+                  id: event.target.value,
+                  linkType: "Entry",
+                  type: "Link"
+                }
+              })
+                .then(() => {
+                  status.innerHTML = 'Saved';
+                })
+                .catch( error => {
+                  status.innerHTML = 'Error: ' + JSON.strinigy(error);
+                })
+            })
+          })
+        });
+
+      })
+    </script>
+  </body>
+</html>

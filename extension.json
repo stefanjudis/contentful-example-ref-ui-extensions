@@ -1,0 +1,8 @@
+{
+  "name": "Contentful UI reference radio select",
+  "id": "cf-contentful-ui-ref-radio-select",
+  "fieldTypes": [
+    "Entry"
+  ],
+  "srcdoc": "./index.html"
+}

@@ -1,0 +1,28 @@
+{
+  "name": "cf-ui-ref-radio",
+  "version": "1.0.0",
+  "description": "Example to display a reference field with radios using a UI-extension",
+  "scripts": {
+    "create": "contentful-extension create --space-id ${SPACE_ID}",
+    "update": "contentful-extension update --space-id ${SPACE_ID} --force",
+    "update-dev": "contentful-extension update --space-id ${SPACE_ID} --force --src 'https://localhost:8000/index.html'",
+    "serve": "http-server . -p 8000 -S",
+    "dev": "npm run update-dev && npm run serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stefanjudis/contentful-example-ref-ui-extensions.git"
+  },
+  "keywords": [],
+  "author": "stefan judis <stefanjudis@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stefanjudis/contentful-example-ref-ui-extensions/issues"
+  },
+  "homepage": "https://github.com/stefanjudis/contentful-example-ref-ui-extensions",
+  "devDependencies": {
+    "contentful-extension-cli": "^2.0.0",
+    "http-server": "^0.10.0",
+    "inquirer": "^3.2.0"
+  }
+}
